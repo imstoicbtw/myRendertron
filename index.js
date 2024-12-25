@@ -33,11 +33,17 @@ app.get('/render', async (req, res) => {
         // Launch browser instance with specific args for cloud deployment
         const browser = await puppeteer.launch({
             headless: 'new',
+            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--disable-dev-shm-usage',
-                '--single-process'
+                '--disable-gpu',
+                '--no-first-run',
+                '--no-zygote',
+                '--deterministic-fetch',
+                '--disable-features=IsolateOrigins',
+                '--disable-site-isolation-trials'
             ]
         });
 
