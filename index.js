@@ -1,8 +1,16 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
+const cors = require('cors');
 
 // Initialize express app
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: ['GET', 'OPTIONS'], // Allow only GET and OPTIONS methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allow these headers
+}));
 const port = process.env.PORT || 3000;
 
 /**
@@ -48,6 +56,7 @@ app.get('/render', async (req, res) => {
         await browser.close();
 
         // Send the rendered content as response
+        res.set('Content-Type', 'text/html');
         res.send(renderedContent);
 
     } catch (error) {
@@ -64,12 +73,12 @@ app.get('/', (req, res) => {
     res.json({ 
         status: 'ok',
         message: 'Server is running',
-        usage: 'GET /render?url=https://example.com'
+        usage: 'GET /render?url=YOUR_FULL_URL'
     });
 });
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-    console.log('Example usage: http://localhost:3000/render?url=https://example.com');
+    console.log(`Server running at PORT ${port}`);
+    console.log('Example usage: /render?url=YOUR_FULL_URL');
 });
